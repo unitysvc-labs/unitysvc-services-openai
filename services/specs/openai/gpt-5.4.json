@@ -1,38 +1,39 @@
 {
   "parameters": {
     "api_base_url": "https://api.openai.com",
-    "default_visibility": "unlisted",
-    "description": "GPT-5 Chat Latest language model",
+    "default_visibility": "public",
+    "description": "GPT-5.4 language model",
     "details": {
-      "context_length": 128000,
+      "context_length": 272000,
       "litellm_provider": "openai",
-      "max_input_tokens": 128000,
-      "max_output_tokens": 16384,
-      "max_tokens": 16384,
+      "max_input_tokens": 1050000,
+      "max_output_tokens": 128000,
+      "max_tokens": 128000,
       "metadata_sources": {
-        "context_length": "litellm"
+        "context_length": "openrouter"
       },
       "mode": "chat",
       "object": "model",
-      "owned_by": "openai",
+      "owned_by": "system",
       "parameter_count": null
     },
-    "display_name": "GPT-5 Chat Latest",
+    "display_name": "GPT-5.4",
     "env_api_key_name": "OPENAI_API_KEY",
     "list_price": {
       "description": "Free (BYOK)",
       "price": "0",
       "type": "constant"
     },
-    "offering_name": "gpt-5-chat-latest",
+    "offering_name": "gpt-5.4",
     "payout_price": {
       "description": "Free (BYOK)",
       "price": "0",
       "type": "constant"
     },
-    "pricing_note": "$1.25 / $10 / $0.125 per 1M input/output/cached tokens",
+    "pricing_note": "$2.5 / $15 / $0.25 per 1M input/output/cached tokens",
     "provider_display_name": "OpenAI",
     "service_type": "llm",
-    "status": "ready"
+    "status": "ready",
+    "supports_tools": true
   }
 }

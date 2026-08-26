@@ -56,8 +56,26 @@
           llm_translator, so callers may send either. -#}
       "formats": ["openai", "anthropic"],
       "upstream_dialect": "openai",
-      "tools": true,
+      {#- Probed live by scripts/update_params.py: gpt-5.6-* refuses
+          function tools in Chat Completions unless reasoning_effort is
+          'none', so declaring tools there would fail the canonical
+          example exactly like a customer's first call. -#}
+      "tools": {{ supports_tools | default(true) | tojson }},
       "sleep": 5
+    },
+    {#- Sibling override, merged over the collection by title: replaces the
+        stock connectivity probe, whose "max_tokens":1 body is rejected by
+        OpenAI's reasoning models (gpt-5*, o-series) with "Unsupported
+        parameter … use 'max_completion_tokens'". The bundled probe sends
+        max_completion_tokens instead. -#}
+    "Connectivity test": {
+      "category": "connectivity_test",
+      "description": "One-token chat completion probe (max_completion_tokens variant for OpenAI reasoning models).",
+      "file_path": "connectivity.sh.j2",
+      "is_active": true,
+      "is_public": false,
+      "meta": {"output_contains": "connectivity ok", "sleep_after_test": 5},
+      "mime_type": "bash"
     }
   }
 }

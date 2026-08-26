@@ -1,7 +1,7 @@
 {
   "parameters": {
     "api_base_url": "https://api.openai.com",
-    "default_visibility": "unlisted",
+    "default_visibility": "public",
     "description": "GPT-4o Mini language model",
     "details": {
       "context_length": 128000,
@@ -14,7 +14,7 @@
       },
       "mode": "chat",
       "object": "model",
-      "owned_by": "openai",
+      "owned_by": "system",
       "parameter_count": null
     },
     "display_name": "GPT-4o Mini",
@@ -33,6 +33,7 @@
     "pricing_note": "$0.15 / $0.6 / $0.075 per 1M input/output/cached tokens",
     "provider_display_name": "OpenAI",
     "service_type": "llm",
-    "status": "ready"
+    "status": "ready",
+    "supports_tools": true
   }
 }
