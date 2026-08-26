@@ -20,15 +20,19 @@
     "display_name": "GPT-4o",
     "env_api_key_name": "OPENAI_API_KEY",
     "list_price": {
-      "description": "Free (BYOK)",
-      "price": "0",
-      "type": "constant"
+      "cached_input": "0",
+      "description": "Service provider charges $2.5 / $10 / $1.25 per 1M input/output/cached tokens",
+      "input": "0",
+      "output": "0",
+      "type": "one_million_tokens"
     },
     "offering_name": "gpt-4o",
     "payout_price": {
-      "description": "Free (BYOK)",
-      "price": "0",
-      "type": "constant"
+      "cached_input": "0",
+      "description": "Service provider charges $2.5 / $10 / $1.25 per 1M input/output/cached tokens",
+      "input": "0",
+      "output": "0",
+      "type": "one_million_tokens"
     },
     "pricing_note": "$2.5 / $10 / $1.25 per 1M input/output/cached tokens",
     "provider_display_name": "OpenAI",

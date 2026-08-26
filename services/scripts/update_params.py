@@ -260,38 +260,44 @@ class ModelSource:
         if canonical["sources"]:
             details["metadata_sources"] = canonical["sources"]
 
-        # BYOK: the customer supplies their own API key, so usage is billed by
-        # the provider directly and UnitySVC meters nothing — the price is Free.
-        # This plain description is what payout_price keeps (seller-facing). The
-        # customer-facing listing cell is composed in listing.json.j2 from
-        # pricing_note, into the "<amount> — <PILL> | <note>" grammar; do not
-        # build it here, since this dict feeds payout_price too.
-        pricing = {
-            "type": "constant",
-            "price": "0",
-            "description": "Free (BYOK)",
-        }
+        # Extract upstream pricing for description, but set prices to 0 for BYOK.
+        #
+        # `pricing_note` is the bare rate card — no "Service provider charges"
+        # prefix, because the copy that consumes it already names the biller.
+        # It is a param in its own right so the templates can place it: the
+        # listing cell puts it behind the `|` of the price-description grammar
+        # (unitysvc/unitysvc#1886) and the offering description states it in
+        # prose. Do NOT fold it back into `pricing["description"]` — that dict
+        # feeds `payout_price` too, which is seller-facing and stays as it is.
+        pricing = None
         pricing_note = None
         if model_data and "input_cost_per_token" in model_data and "output_cost_per_token" in model_data:
             input_price = round(float(
                 model_data["input_cost_per_token"]) * 1_000_000, 4)
             output_price = round(float(
                 model_data["output_cost_per_token"]) * 1_000_000, 4)
+            pricing_note = (
+                f"${self._format_price(input_price)} / "
+                f"${self._format_price(output_price)} "
+                f"per 1M input/output tokens"
+            )
+            pricing = {
+                "type": "one_million_tokens",
+                "input": "0",
+                "output": "0",
+                "description": f"Service provider charges {pricing_note}",
+            }
             if "cache_read_input_token_cost" in model_data:
                 cached_price = round(float(
                     model_data["cache_read_input_token_cost"]) * 1_000_000, 4)
+                pricing["cached_input"] = "0"
                 pricing_note = (
                     f"${self._format_price(input_price)} / "
                     f"${self._format_price(output_price)} / "
                     f"${self._format_price(cached_price)} "
                     f"per 1M input/output/cached tokens"
                 )
-            else:
-                pricing_note = (
-                    f"${self._format_price(input_price)} / "
-                    f"${self._format_price(output_price)} "
-                    f"per 1M input/output tokens"
-                )
+                pricing["description"] = f"Service provider charges {pricing_note}"
 
         return {
             # Folder path under specs/ == listing.name == "<provider>/<model_id>"

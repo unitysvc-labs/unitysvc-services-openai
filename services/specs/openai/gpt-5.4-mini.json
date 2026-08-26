@@ -20,15 +20,19 @@
     "display_name": "GPT-5.4 Mini",
     "env_api_key_name": "OPENAI_API_KEY",
     "list_price": {
-      "description": "Free (BYOK)",
-      "price": "0",
-      "type": "constant"
+      "cached_input": "0",
+      "description": "Service provider charges $0.75 / $4.5 / $0.075 per 1M input/output/cached tokens",
+      "input": "0",
+      "output": "0",
+      "type": "one_million_tokens"
     },
     "offering_name": "gpt-5.4-mini",
     "payout_price": {
-      "description": "Free (BYOK)",
-      "price": "0",
-      "type": "constant"
+      "cached_input": "0",
+      "description": "Service provider charges $0.75 / $4.5 / $0.075 per 1M input/output/cached tokens",
+      "input": "0",
+      "output": "0",
+      "type": "one_million_tokens"
     },
     "pricing_note": "$0.75 / $4.5 / $0.075 per 1M input/output/cached tokens",
     "provider_display_name": "OpenAI",
