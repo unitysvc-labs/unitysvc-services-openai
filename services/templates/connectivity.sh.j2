@@ -1,0 +1,17 @@
+#!/bin/bash
+# LLM connectivity probe — OpenAI variant of unitysvc-data's llm_connectivity.
+# Repo-local because OpenAI's reasoning models (gpt-5*, o-series) reject the
+# classic "max_tokens" the stock preset sends ("Unsupported parameter: use
+# 'max_completion_tokens' instead"); this probe sends max_completion_tokens,
+# which every current OpenAI chat model accepts. 16 rather than 1 so a
+# reasoning model has headroom to emit a choices array.
+set -e -o pipefail
+
+: "${UNITYSVC_API_KEY:?UNITYSVC_API_KEY is not set}"
+
+curl --fail-with-body -sS "{{ service_base_url }}/v1/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${UNITYSVC_API_KEY}" \
+  -d '{"model":"{{ routing_key.model }}","messages":[{"role":"user","content":"ping"}],"max_completion_tokens":16}' \
+  | grep -q '"choices"'
+echo "connectivity ok"
