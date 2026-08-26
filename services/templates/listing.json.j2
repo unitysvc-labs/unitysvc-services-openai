@@ -52,9 +52,10 @@
   "documents": {
     "$llm_example_collection": {
       "capabilities": ["chat"],
-      {#- The gateway exposes this OpenAI upstream in both dialects via the
-          llm_translator, so callers may send either. -#}
-      "formats": ["openai", "anthropic"],
+      {#- openai-only for now: the anthropic dialect (and its examples) is
+          disabled with the translator while the gateway translation route is
+          debugged (unitysvc#1929) — re-enable both together. -#}
+      "formats": ["openai"],
       "upstream_dialect": "openai",
       {#- Probed live by scripts/update_params.py: gpt-5.6-* refuses
           function tools in Chat Completions unless reasoning_effort is
@@ -76,6 +77,20 @@
       "is_public": false,
       "meta": {"output_contains": "connectivity ok", "sleep_after_test": 5},
       "mime_type": "bash"
+    },
+    {#- Sibling override of the collection's streaming example: the stock
+        preset indexes chunk.choices[0] unguarded and IndexErrors on the
+        empty-choices SSE frames this catalog's streams carry. Drop this
+        override once unitysvc-data#66 is released and the collection's
+        preset carries the guard. -#}
+    "Python code example (streaming, openai SDK)": {
+      "category": "code_example",
+      "description": "Python example: stream a chat completion from an OpenAI-compatible LLM using the openai SDK",
+      "file_path": "code-example-streaming.py.j2",
+      "is_active": true,
+      "is_public": true,
+      "meta": {"requirements": ["openai"], "variant": "Streaming", "sleep_after_test": 5},
+      "mime_type": "python"
     }
   }
 }
