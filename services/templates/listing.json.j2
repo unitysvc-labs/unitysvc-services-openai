@@ -56,7 +56,11 @@
           llm_translator, so callers may send either. -#}
       "formats": ["openai", "anthropic"],
       "upstream_dialect": "openai",
-      "tools": true,
+      {#- Probed live by scripts/update_params.py: gpt-5.6-* refuses
+          function tools in Chat Completions unless reasoning_effort is
+          'none', so declaring tools there would fail the canonical
+          example exactly like a customer's first call. -#}
+      "tools": {{ supports_tools | default(true) | tojson }},
       "sleep": 5
     },
     {#- Sibling override, merged over the collection by title: replaces the

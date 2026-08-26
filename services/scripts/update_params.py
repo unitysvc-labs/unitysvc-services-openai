@@ -105,6 +105,7 @@ class ModelSource:
             # Build template variables
             template_vars = self._build_template_vars(model_id, model_info)
             if template_vars:
+                template_vars["supports_tools"] = self._probe_tools(model_id)
                 yield template_vars
                 print("  OK")
 
@@ -142,6 +143,46 @@ class ModelSource:
                   f"{err.get('code')} — {err.get('message', '')[:80]})")
             return False
         print(f"  probe HTTP {r.status_code} — keeping")
+        return True
+
+    def _probe_tools(self, model_id: str) -> bool:
+        """Does Chat Completions accept a function tool for this model?
+
+        Some models refuse the combination — gpt-5.6-* returns 400
+        "Function tools with reasoning_effort are not supported … in
+        /v1/chat/completions" unless reasoning_effort is 'none'. The
+        catalog's canonical tools example sends neither knob, so a model
+        that refuses it must not declare the tools capability (the
+        gateway test would fail exactly like a customer's first call).
+        Only an explicit 400/404 refusal clears the flag.
+        """
+        tool = {
+            "type": "function",
+            "function": {
+                "name": "get_time",
+                "description": "Get the current time",
+                "parameters": {"type": "object", "properties": {}},
+            },
+        }
+        try:
+            r = httpx.post(
+                f"{API_BASE_URL}/v1/chat/completions",
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                json={"model": model_id,
+                      "messages": [{"role": "user", "content": "What time is it?"}],
+                      "tools": [tool]},
+                timeout=60.0,
+            )
+        except Exception as e:
+            print(f"  tools probe error ({e}) — assuming supported")
+            return True
+        if r.status_code in (400, 404):
+            try:
+                msg = r.json().get("error", {}).get("message", "")
+            except Exception:
+                msg = ""
+            print(f"  tools NOT supported ({msg[:70]})")
+            return False
         return True
 
     def _skip_reason(self, model_id: str) -> str | None:
