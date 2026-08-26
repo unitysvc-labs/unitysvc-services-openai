@@ -28,7 +28,10 @@ from unitysvc_sellers.params_render import write_params_from_iterator
 # Provider Configuration
 PROVIDER_NAME = "openai"
 PROVIDER_DISPLAY_NAME = "OpenAI"
-API_BASE_URL = "https://api.openai.com/v1"
+# No /v1 suffix: the example/connectivity presets (and gateway callers)
+# carry the version prefix in the request path, so a /v1 here doubles up
+# into /v1/v1/… and 404s every test.
+API_BASE_URL = "https://api.openai.com"
 ENV_API_KEY_NAME = "OPENAI_API_KEY"
 
 SCRIPT_DIR = Path(__file__).parent
@@ -77,7 +80,7 @@ class ModelSource:
         print(f"Fetching models from {PROVIDER_DISPLAY_NAME} API...")
         try:
             r = httpx.get(
-                f"{API_BASE_URL}/models",
+                f"{API_BASE_URL}/v1/models",
                 headers={"Authorization": f"Bearer {self.api_key}"},
                 timeout=30.0,
             )

@@ -1,6 +1,6 @@
 {
   "parameters": {
-    "api_base_url": "https://api.openai.com/v1",
+    "api_base_url": "https://api.openai.com",
     "default_visibility": "unlisted",
     "description": "ChatGPT-4o Latest language model",
     "details": {
