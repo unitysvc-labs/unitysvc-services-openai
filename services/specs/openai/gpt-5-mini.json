@@ -1,7 +1,7 @@
 {
   "parameters": {
     "api_base_url": "https://api.openai.com",
-    "default_visibility": "unlisted",
+    "default_visibility": "public",
     "description": "GPT-5 Mini language model",
     "details": {
       "context_length": 400000,
@@ -14,7 +14,7 @@
       },
       "mode": "chat",
       "object": "model",
-      "owned_by": "openai",
+      "owned_by": "system",
       "parameter_count": null
     },
     "display_name": "GPT-5 Mini",
