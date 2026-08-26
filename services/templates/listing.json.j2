@@ -58,6 +58,20 @@
       "upstream_dialect": "openai",
       "tools": true,
       "sleep": 5
+    },
+    {#- Sibling override, merged over the collection by title: replaces the
+        stock connectivity probe, whose "max_tokens":1 body is rejected by
+        OpenAI's reasoning models (gpt-5*, o-series) with "Unsupported
+        parameter … use 'max_completion_tokens'". The bundled probe sends
+        max_completion_tokens instead. -#}
+    "Connectivity test": {
+      "category": "connectivity_test",
+      "description": "One-token chat completion probe (max_completion_tokens variant for OpenAI reasoning models).",
+      "file_path": "connectivity.sh.j2",
+      "is_active": true,
+      "is_public": false,
+      "meta": {"output_contains": "connectivity ok", "sleep_after_test": 5},
+      "mime_type": "bash"
     }
   }
 }
