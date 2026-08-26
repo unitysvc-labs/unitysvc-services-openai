@@ -1,0 +1,11 @@
+{
+  "services_populator": {
+    "command": [
+      "scripts/update_params.py"
+    ],
+    "requirements": [
+      "httpx",
+      "unitysvc-sellers"
+    ]
+  }
+}

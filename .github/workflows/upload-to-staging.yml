@@ -1,0 +1,14 @@
+name: Upload Data to Staging
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  upload:
+    uses: unitysvc-labs/.github/.github/workflows/seller-upload-staging.yml@main
+    secrets: inherit
+    permissions:
+      contents: write

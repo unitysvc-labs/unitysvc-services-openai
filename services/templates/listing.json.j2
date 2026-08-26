@@ -1,0 +1,63 @@
+{
+  "status": "{{ status | default('ready') }}",
+  "currency": "USD",
+  {#- Visibility the upload applies to the service. Populated per-service by
+      scripts/update_params.py from the DEFAULT_VISIBILITY env var (the org-level
+      GitHub variable); the literal fallback keeps hand-written param files and
+      local renders working when it is absent. Must stay one of
+      public | unlisted | private — the validator allowlists it. #}
+  "service_options": {
+    "default_visibility": "{{ default_visibility | default('unlisted') }}"
+  },
+  {#- name = <provider>/<bare> per the platform service-naming convention
+      (unitysvc PR #1196 / issue #1138). #}
+  "name": "{{ provider_name }}/{{ offering_name }}",
+{%- if list_price %}
+{#- Price-cell copy follows the marketplace description grammar
+    (unitysvc/unitysvc#1886, PR #1887):
+
+        <amount> [ ~<intent> <PILL> ] [ | <hover note> ]
+
+    BYOK is *why* the gateway price is free, so it rides the badge slot and
+    renders as a pill beside the amount. A bare `~` selects the default
+    intent — a saving — which is the green fill; `~deal` / `~coupon` /
+    `~info` are the other registers. The provider's reference rates ride the
+    `|` note: that slot is taken first and consumed to end-of-string, so
+    everything in it is inert — a rate card may contain "/" and "per"
+    without being re-parsed as a unit.
+
+    Composed here rather than written into the param file because
+    scripts/update_params.py rebuilds list_price on the nightly populate run
+    and would drop a hand-edited description within a day. #}
+{%- set _rate = (' | usage is billed by ' ~ provider_display_name ~ ' directly at ' ~ pricing_note) if pricing_note else '' %}
+  "list_price": {{ dict(list_price, description='Free ~ BYOK' ~ _rate) | tojson }},
+{%- endif %}
+  "user_access_interfaces": {
+    "provider_api": {
+      "access_method": "http",
+      "base_url": "${API_GATEWAY_BASE_URL}/{{ provider_name }}",
+      "routing_key": {"model": "{{ offering_name }}"}
+    }
+  },
+  {#- Every document below is DERIVED from what this service is: its
+      capability and the request dialects it accepts. The catalog-wide
+      shape lives in unitysvc-data's `llm_example_collection` preset, so a
+      new example flavour or a fixed preset reaches this repo on the next
+      release rather than through a PR here (unitysvc/unitysvc#1899).
+
+      Anything specific to one service goes in a SIBLING key beside the
+      sentinel: `expand_presets` merges siblings over the expanded mapping,
+      so a listing can add a document the collection cannot derive, or
+      replace one it generated, by title. OpenAI needs none. -#}
+  "documents": {
+    "$llm_example_collection": {
+      "capabilities": ["chat"],
+      {#- The gateway exposes this OpenAI upstream in both dialects via the
+          llm_translator, so callers may send either. -#}
+      "formats": ["openai", "anthropic"],
+      "upstream_dialect": "openai",
+      "tools": true,
+      "sleep": 5
+    }
+  }
+}

@@ -1,0 +1,19 @@
+name: Populate Services
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: "0 2 * * *"
+  workflow_dispatch: # Allow manual triggering
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  populate:
+    uses: unitysvc-labs/.github/.github/workflows/seller-populate-services.yml@main
+    secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write

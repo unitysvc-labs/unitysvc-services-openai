@@ -1,0 +1,38 @@
+{
+  "parameters": {
+    "api_base_url": "https://api.openai.com/v1",
+    "default_visibility": "unlisted",
+    "description": "GPT-5 Mini language model",
+    "details": {
+      "context_length": 400000,
+      "litellm_provider": "openai",
+      "max_input_tokens": 272000,
+      "max_output_tokens": 128000,
+      "max_tokens": 128000,
+      "metadata_sources": {
+        "context_length": "openrouter"
+      },
+      "mode": "chat",
+      "object": "model",
+      "owned_by": "openai",
+      "parameter_count": null
+    },
+    "display_name": "GPT-5 Mini",
+    "env_api_key_name": "OPENAI_API_KEY",
+    "list_price": {
+      "description": "Free (BYOK)",
+      "price": "0",
+      "type": "constant"
+    },
+    "offering_name": "gpt-5-mini",
+    "payout_price": {
+      "description": "Free (BYOK)",
+      "price": "0",
+      "type": "constant"
+    },
+    "pricing_note": "$0.25 / $2 / $0.025 per 1M input/output/cached tokens",
+    "provider_display_name": "OpenAI",
+    "service_type": "llm",
+    "status": "ready"
+  }
+}

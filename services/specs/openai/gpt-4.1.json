@@ -1,0 +1,38 @@
+{
+  "parameters": {
+    "api_base_url": "https://api.openai.com/v1",
+    "default_visibility": "unlisted",
+    "description": "GPT-4.1 language model",
+    "details": {
+      "context_length": 1047576,
+      "litellm_provider": "openai",
+      "max_input_tokens": 1047576,
+      "max_output_tokens": 32768,
+      "max_tokens": 32768,
+      "metadata_sources": {
+        "context_length": "openrouter"
+      },
+      "mode": "chat",
+      "object": "model",
+      "owned_by": "openai",
+      "parameter_count": null
+    },
+    "display_name": "GPT-4.1",
+    "env_api_key_name": "OPENAI_API_KEY",
+    "list_price": {
+      "description": "Free (BYOK)",
+      "price": "0",
+      "type": "constant"
+    },
+    "offering_name": "gpt-4.1",
+    "payout_price": {
+      "description": "Free (BYOK)",
+      "price": "0",
+      "type": "constant"
+    },
+    "pricing_note": "$2 / $8 / $0.5 per 1M input/output/cached tokens",
+    "provider_display_name": "OpenAI",
+    "service_type": "llm",
+    "status": "ready"
+  }
+}

@@ -1,0 +1,52 @@
+{
+{#- Model-family logo (unitysvc/unitysvc-data#60): the catalog row shows the
+    model's own mark rather than the provider's — the model is what a customer
+    recognises, and the provider is already named beside it. Resolved from the
+    model id, so no per-model parameter is needed and the populate script
+    cannot destroy it. A model the registry does not know resolves to null,
+    which creates no document and leaves the provider logo in place, so the key
+    needs no conditional. -#}
+  "logo": {{ {"$logo_preset": offering_name} | tojson }},
+  "name": "{{ offering_name }}",
+  "display_name": "{{ display_name }}",
+{#- Marketplace summary (teaser, <=200 chars) + long-form description
+    (the populate script emits a one-line brief). #}
+{%- set _brief = description | default(display_name ~ ' — a ' ~ service_type ~ ' model served by ' ~ provider_display_name, true) %}
+{%- set _ctx = ' with a ' ~ details.context_length ~ '-token context window' if details.context_length else '' %}
+{%- set _detail = display_name ~ ' is served by ' ~ provider_display_name ~ ' over the OpenAI API' ~ _ctx ~ '. Requests are proxied through the UnitySVC gateway.' %}
+{%- set _howto = 'Reach it through the UnitySVC gateway with your own ' ~ provider_display_name ~ ' API key (the byok channel). The endpoint accepts both OpenAI Chat Completions and Anthropic Messages requests — the gateway auto-detects the dialect, translates to the upstream, and returns the response in the format you sent. See the code examples for both styles.' %}
+{#- Closing pricing paragraph. The price cell now carries "why free" itself — a
+    BYOK pill beside the amount (see listing.json.j2) — so this paragraph no
+    longer repeats it and states only the rate. It is not redundant with the
+    cell's hover note: a `title` attribute is unreachable on touch, absent from
+    the API/MCP catalog surface, and not searchable, and for a BYOK listing the
+    upstream rate is the difference between free and real money. #}
+{%- set _byok = 'Pricing — usage is billed by ' ~ provider_display_name ~ ' directly' ~ (' at ' ~ pricing_note if pricing_note else '') ~ '.' %}
+{%- set _description = _detail ~ '\n\n' ~ _howto ~ '\n\n' ~ _byok %}
+  "summary": {{ _brief[:200] | tojson }},
+  "description": {{ _description | tojson }},
+  "service_type": "{{ service_type }}",
+  {#- Platform capability vocabulary (unitysvc docs/capabilities.yml): every
+     model here is a chat service — a conversation in, generated text out.
+     `service_type` stays as-is; only the capability moves. -#}
+  "capabilities": ["chat"],
+  "status": "{{ status | default('ready') }}",
+  "currency": "USD",
+  "tags": ["ai", "gateway", "byok"],
+  "details": {{ dict(details or {}, input_formats=["openai", "anthropic"], output_formats=["openai_response", "anthropic_response"]) | tojson }},
+{%- if payout_price %}
+  "payout_price": {{ payout_price | tojson }},
+{%- endif %}
+  "upstream_access_config": {
+    "byok": {
+      "access_method": "http",
+      "base_url": "{{ api_base_url }}",
+      "api_key": "${ customer_secrets.{{ env_api_key_name }} }",
+      "rate_limits": [],
+      "routing_key": {"model": "{{ offering_name }}"},
+      "request_transformer": {
+        "llm_translator": "anthropic_to_openai"
+      }
+    }
+  }
+}

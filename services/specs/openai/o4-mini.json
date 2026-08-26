@@ -1,0 +1,38 @@
+{
+  "parameters": {
+    "api_base_url": "https://api.openai.com/v1",
+    "default_visibility": "unlisted",
+    "description": "o4-mini language model",
+    "details": {
+      "context_length": 200000,
+      "litellm_provider": "openai",
+      "max_input_tokens": 200000,
+      "max_output_tokens": 100000,
+      "max_tokens": 100000,
+      "metadata_sources": {
+        "context_length": "openrouter"
+      },
+      "mode": "chat",
+      "object": "model",
+      "owned_by": "openai",
+      "parameter_count": null
+    },
+    "display_name": "o4-mini",
+    "env_api_key_name": "OPENAI_API_KEY",
+    "list_price": {
+      "description": "Free (BYOK)",
+      "price": "0",
+      "type": "constant"
+    },
+    "offering_name": "o4-mini",
+    "payout_price": {
+      "description": "Free (BYOK)",
+      "price": "0",
+      "type": "constant"
+    },
+    "pricing_note": "$1.1 / $4.4 / $0.275 per 1M input/output/cached tokens",
+    "provider_display_name": "OpenAI",
+    "service_type": "llm",
+    "status": "ready"
+  }
+}
