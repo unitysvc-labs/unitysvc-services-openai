@@ -311,10 +311,19 @@ class ModelSource:
             # Listing fields
             "list_price": pricing,
             # Visibility the upload applies, from the DEFAULT_VISIBILITY GitHub
-            # variable. `or` rather than a get() default: an unset variable
-            # reaches the runner as an empty string, which would render an
-            # invalid "" visibility.
-            "default_visibility": os.environ.get("DEFAULT_VISIBILITY") or "unlisted",
+            # variable. Absent when the variable is unset or empty, and absent
+            # means "leave it alone": ingest does
+            # ``default_visibility or existing_service.visibility``, so omitting
+            # the key preserves whatever visibility the live service already
+            # has. Defaulting it to `unlisted` instead — as this did — silently
+            # UNLISTED every already-public service on the next upload, which is
+            # the confusion this removes. Set the variable to `public` once a
+            # repo is trusted to publish by default.
+            **(
+                {"default_visibility": _default_visibility}
+                if (_default_visibility := os.environ.get("DEFAULT_VISIBILITY", "").strip())
+                else {}
+            ),
             # Provider config (for templates)
             "provider_name": PROVIDER_NAME,
             "provider_display_name": PROVIDER_DISPLAY_NAME,
