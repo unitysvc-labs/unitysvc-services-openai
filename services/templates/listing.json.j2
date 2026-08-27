@@ -3,12 +3,16 @@
   "currency": "USD",
   {#- Visibility the upload applies to the service. Populated per-service by
       scripts/update_params.py from the DEFAULT_VISIBILITY env var (the org-level
-      GitHub variable); the literal fallback keeps hand-written param files and
-      local renders working when it is absent. Must stay one of
-      public | unlisted | private — the validator allowlists it. #}
+      GitHub variable). Emitted ONLY when that variable is set: ingest treats an
+      absent value as "leave it alone" (``default_visibility or
+      existing_service.visibility``), whereas a literal fallback would re-apply
+      itself on every upload and silently change a live service's visibility.
+      Must stay one of public | unlisted | private — the validator allowlists it. #}
+{%- if default_visibility %}
   "service_options": {
-    "default_visibility": "{{ default_visibility | default('unlisted') }}"
+    "default_visibility": "{{ default_visibility }}"
   },
+{%- endif %}
   {#- name = <provider>/<bare> per the platform service-naming convention
       (unitysvc PR #1196 / issue #1138). #}
   "name": "{{ provider_name }}/{{ offering_name }}",
