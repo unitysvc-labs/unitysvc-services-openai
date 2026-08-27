@@ -4,6 +4,21 @@
   "homepage": "https://openai.com/",
   "logo": "https://avatars.githubusercontent.com/u/14957082",
   "name": "openai",
+  "rate_limits": [
+    {
+      "description": "Self-imposed ceiling so platform test sweeps cannot saturate the account; not a published provider limit.",
+      "limit": 10,
+      "name": "openai_concurrency",
+      "unit": "concurrent"
+    },
+    {
+      "description": "Self-imposed ceiling so platform test sweeps cannot saturate the account; not a published provider limit.",
+      "limit": 100,
+      "name": "openai_rpm",
+      "unit": "requests",
+      "window": "minute"
+    }
+  ],
   "status": "ready",
   "terms_of_service": "https://openai.com/policies/terms-of-use",
   "time_created": "2026-08-25T00:00:00Z"
