@@ -1,7 +1,7 @@
 {
   "parameters": {
     "api_base_url": "https://api.openai.com",
-    "default_visibility": "public",
+    "default_visibility": "unlisted",
     "description": "GPT-5.5 language model",
     "details": {
       "context_length": 1050000,
