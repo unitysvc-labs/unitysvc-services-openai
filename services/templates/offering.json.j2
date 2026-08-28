@@ -44,8 +44,20 @@
       "api_key": "${ customer_secrets.{{ env_api_key_name }} }",
       "rate_limits": [],
       "routing_key": {"model": "{{ offering_name }}"},
+      {#- The translator defaults to emitting `max_tokens`, the spelling with
+          the widest cross-provider support (some upstreams, e.g. Nebius,
+          reject `max_completion_tokens` outright as extra_forbidden). OpenAI's
+          reasoning models are the other way round: gpt-5*/o-series 400 on
+          `max_tokens` with "Unsupported parameter … use
+          'max_completion_tokens'", which failed every Anthropic-style code
+          example. Every current OpenAI chat model accepts the newer name
+          (verified live down to gpt-3.5-turbo), so pin it for the whole
+          catalog — the same call the bundled connectivity probe makes. -#}
       "request_transformer": {
-        "llm_translator": "anthropic_to_openai"
+        "llm_translator": {
+          "direction": "anthropic_to_openai",
+          "max_tokens_field": "max_completion_tokens"
+        }
       }
     }
   }
