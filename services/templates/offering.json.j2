@@ -32,7 +32,18 @@
   "capabilities": ["chat"],
   "status": "{{ status | default('ready') }}",
   "currency": "USD",
-  "tags": ["ai", "gateway", "byok"],
+{#- Tags are a CLOSED vocabulary server-side (unitysvc docs/tags.yml): ingest
+    rejects anything outside it, and `feature:func-call` is the only tag a
+    seller may declare. The legacy ai/gateway/byok trio restated service_type,
+    gateway_type and the enrollment channel — all platform-derived — so it is
+    gone rather than translated. No _is_chat guard is needed here: every service
+    in this repo is a chat model (the populator drops any candidate that fails a
+    live /v1/chat/completions probe, and `capabilities` above is hardcoded to
+    chat for that reason). supports_tools comes from the populator's live tool
+    probe, so it is a positive per-model signal, not a default. -#}
+{%- if supports_tools | default(false) %}
+  "tags": ["feature:func-call"],
+{%- endif %}
   "details": {{ dict(details or {}, input_formats=["openai", "anthropic"], output_formats=["openai_response", "anthropic_response"]) | tojson }},
 {%- if payout_price %}
   "payout_price": {{ payout_price | tojson }},
