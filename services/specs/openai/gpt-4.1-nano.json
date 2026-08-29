@@ -1,7 +1,6 @@
 {
   "parameters": {
     "api_base_url": "https://api.openai.com",
-    "default_visibility": "public",
     "description": "GPT-4.1 Nano language model",
     "details": {
       "context_length": 1047576,
