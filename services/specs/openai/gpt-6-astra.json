@@ -1,0 +1,38 @@
+{
+  "parameters": {
+    "api_base_url": "https://api.openai.com",
+    "description": "GPT-6 Astra language model",
+    "details": {
+      "context_length": 1050000,
+      "litellm_provider": "openai",
+      "max_input_tokens": 922000,
+      "max_output_tokens": 128000,
+      "max_tokens": 128000,
+      "metadata_sources": {
+        "context_length": "openrouter"
+      },
+      "mode": "chat",
+      "object": "model",
+      "owned_by": "system",
+      "parameter_count": null
+    },
+    "display_name": "GPT-6 Astra",
+    "env_api_key_name": "OPENAI_API_KEY",
+    "list_price": {
+      "description": "Free (BYOK)",
+      "price": "0",
+      "type": "constant"
+    },
+    "offering_name": "gpt-6-astra",
+    "payout_price": {
+      "description": "Free (BYOK)",
+      "price": "0",
+      "type": "constant"
+    },
+    "pricing_note": "$10 / $50 / $1 per 1M input/output/cached tokens",
+    "provider_display_name": "OpenAI",
+    "service_type": "llm",
+    "status": "ready",
+    "supports_tools": false
+  }
+}
