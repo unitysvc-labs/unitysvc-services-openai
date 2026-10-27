@@ -7,7 +7,6 @@
       "litellm_provider": "openai",
       "max_input_tokens": 1047576,
       "max_output_tokens": 32768,
-      "max_tokens": 32768,
       "metadata_sources": {
         "context_length": "openrouter"
       },
