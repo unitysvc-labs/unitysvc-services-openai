@@ -53,7 +53,6 @@
       "access_method": "http",
       "base_url": "{{ api_base_url }}",
       "api_key": "${ customer_secrets.{{ env_api_key_name }} }",
-      "rate_limits": [],
       "routing_key": {"model": "{{ offering_name }}"},
       {#- The translator defaults to emitting `max_tokens`, the spelling with
           the widest cross-provider support (some upstreams, e.g. Nebius,
